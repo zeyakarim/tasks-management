@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../config/database');
+const sequelize = require('../../../config/database');
 const isParanoid = true;
 
 const Tasks = sequelize.define('tasks', {

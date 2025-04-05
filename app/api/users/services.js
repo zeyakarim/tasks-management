@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
-const sequelize = require("../../config/database");
-const AppError = require("../utilities/appError");
+const sequelize = require("../../../config/database");
+const AppError = require("../../utilities/appError");
 const { Users } = require("./models");
 const jwt = require('jsonwebtoken');
 const ms = require('ms');

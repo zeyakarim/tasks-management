@@ -1,5 +1,5 @@
-const catchAsync = require('../utilities/catchAsync');
-const { success, failure } = require("../utilities/responseHandler");
+const catchAsync = require('../../utilities/catchAsync');
+const { success, failure } = require("../../utilities/responseHandler");
 const { createTaskService, fetchTasksService, updateTaskService, deleteTaskService } = require('./services');
 
 exports.createTask = catchAsync(async (req, res, next) => {

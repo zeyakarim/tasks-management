@@ -1,5 +1,5 @@
-const sequelize = require("../../config/database");
-const AppError = require("../utilities/appError");
+const sequelize = require("../../../config/database");
+const AppError = require("../../utilities/appError");
 const { Tasks } = require("./models")
 
 const createTaskService = async (data) => {

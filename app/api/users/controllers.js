@@ -1,6 +1,6 @@
-const AppError = require("../utilities/appError");
-const catchAsync = require("../utilities/catchAsync");
-const { success, failure } = require("../utilities/responseHandler");
+const AppError = require("../../utilities/appError");
+const catchAsync = require("../../utilities/catchAsync");
+const { success, failure } = require("../../utilities/responseHandler");
 const { Users } = require("./models");
 const { signUpService, loginService, sendAuthCookie } = require("./services");
 const jwt = require('jsonwebtoken');
