@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js --ignore '*.json'",
-    "postinstall": "npm rebuild pg pg-hstore"
+    "postinstall": "npm rebuild pg --update-binary",
+    "vercel-build": "npm rebuild pg && npm run build"
   },
   "keywords": [],
   "author": "",
