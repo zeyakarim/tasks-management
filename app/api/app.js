@@ -1,6 +1,6 @@
 const express = require('express');
-const taskManagementRoutes = require('./api/tasks-management/routes');
-const userRoutes = require('./api/users/routes');
+const taskManagementRoutes = require('./tasks-management/routes');
+const userRoutes = require('./users/routes');
 const cookieParser = require('cookie-parser');
 
 const cors = require('cors');
