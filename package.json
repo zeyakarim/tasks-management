@@ -8,7 +8,7 @@
     "dev": "nodemon server.js --ignore '*.json'",
     "postinstall": "npm rebuild pg --update-binary",
     "vercel-build": "npm install && npm rebuild pg",
-    "build": "webpack --config webpack.config.js"
+    "build": "sanity build"
   },
   "keywords": [],
   "author": "",
