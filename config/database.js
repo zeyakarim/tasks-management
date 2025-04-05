@@ -23,6 +23,7 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
             console.log(`Slow query (execution time ${queryExecutionTime} ms): ${sql}`);
         }
     },
+    dialectModule: require('pg'),
 });
 
 sequelize
