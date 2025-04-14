@@ -10,8 +10,8 @@ const app = express();
 app.use(
     cors({
         credentials: true,
-        origin: process.env.origin || "http://localhost:3000", // Default for dev
-        contentType: ['application/json'],
+        origin: process.env.origin || "http://localhost:5173", // Default for dev
+        contentType: ['application/json', 'multipart/form-data'],
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
         allowedHeaders: [
             "Content-Type",
@@ -23,7 +23,7 @@ app.use(
         ],
     })
 );
-
+  
 app.use(
     express.json({
       limit: '1024mb',
