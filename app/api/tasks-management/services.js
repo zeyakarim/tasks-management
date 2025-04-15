@@ -56,6 +56,14 @@ const updateTaskService = async (id, data) => {
             updateProperties.status = data.status;
         }
 
+        if (data?.card_type) {
+            updateProperties.card_type = data?.card_type;
+        }
+        
+        if (data?.git_branch_name) {
+            updateProperties.git_branch_name = data?.git_branch_name;
+        }
+
         // If no properties to update, return early
         if (Object.keys(updateProperties).length === 0) {
             await transaction.commit();
