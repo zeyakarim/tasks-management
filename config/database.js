@@ -1,47 +1,70 @@
+require('dotenv').config();
 const { Sequelize } = require('sequelize');
-const env = process.env.NODE_ENV || 'production';
+const env = process.env.NODE_ENV || 'development';
 const config = require('./config')[env];
 
-const sequelize = new Sequelize(config.database, config.username, config.password, {
+// Validate essential configuration
+if (!config) {
+    throw new Error(`No database configuration found for environment: ${env}`);
+}
+
+const sequelize = new Sequelize({
+    database: config.database,
+    username: config.username,
+    password: config.password,
     host: config.host,
+    port: config.port || 5432, // Default PostgreSQL port
     dialect: 'postgres',
     dialectOptions: {
-        ssl: {
+        ssl: env === 'production' ? { // Only enforce SSL in production
             require: true,
-            rejectUnauthorized: false, // Set to true if your server requires valid certificates
-        },
+            rejectUnauthorized: false // Warning: Set to true in production with valid certificates
+        } : false
     },
     pool: {
-        max: parseInt(process.env.Sequelize_Pool_Max) || 5,
-        min: 0,
-        acquire: parseInt(process.env.Sequelize_Pool_Acquire) || 30000,
-        idle: 10000,
+        max: parseInt(process.env.SEQUELIZE_POOL_MAX) || 5,
+        min: parseInt(process.env.SEQUELIZE_POOL_MIN) || 0,
+        acquire: parseInt(process.env.SEQUELIZE_POOL_ACQUIRE) || 30000,
+        idle: parseInt(process.env.SEQUELIZE_POOL_IDLE) || 10000
     },
     logging: (sql, queryExecutionTime) => {
-        // log for slow queries
-        if (queryExecutionTime > (parseInt(process.env.Sequelize_Query_TimeLimit) || 1000)) {
-            console.log(`Slow query (execution time ${queryExecutionTime} ms): ${sql}`);
+        const timeLimit = parseInt(process.env.SEQUELIZE_QUERY_TIMELIMIT) || 1000;
+            if (queryExecutionTime > timeLimit) {
+            console.warn(`[Slow Query] ${queryExecutionTime}ms: ${sql}`);
+        }
+        if (process.env.SEQUELIZE_LOG_ALL_QUERIES === 'true') {
+            console.log(`[Query] ${sql}`);
         }
     },
     dialectModule: require('pg'),
+    define: {
+        timestamps: true, // Enable createdAt and updatedAt by default
+        underscored: true // Use snake_case for column names
+    },
+    benchmark: true // Enable query timing
 });
 
-sequelize
-    .authenticate()
-    .then(() => {
-        console.log(`Connection has been established successfully to, \nDatabase Name: ${config.database} \nUser Name: ${config.username}`);
-    })
-    .catch((err) => {
-        console.error(`Unable to connect to the database ${config.database}:`, err);
-    });
+// Test connection
+async function initializeDatabase() {
+    try {
+        await sequelize.authenticate();
+        console.log(`✅ Database connection established to ${config.database} as ${config.username}`);
+        
+        // Sync models based on environment
+        if (env === 'development') {
+            await sequelize.sync({ alter: true }); // Safe for development
+            console.log('🔄 Database schema synchronized (alter)');
+        } else if (env === 'test') {
+            await sequelize.sync({ force: true }); // Reset for tests
+            console.log('🔄 Database schema synchronized (force)');
+        }
+        // In production, you should use migrations instead of sync()
+    } catch (error) {
+        console.error('❌ Database initialization failed:', error);
+        process.exit(1); // Exit with failure
+    }
+}
 
-sequelize
-    .sync()
-    .then(() => {
-        console.log('Table synchronized successfully!');
-    })
-    .catch((error) => {
-        console.error('Unable to create table:', error);
-    });
+initializeDatabase();
 
 module.exports = sequelize;

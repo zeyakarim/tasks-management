@@ -37,6 +37,9 @@ const Tasks = sequelize.define('tasks', {
     card_type: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    due_date: {
+        type: DataTypes.DATE
     }
 },  {
       freezeTableName: true,
@@ -46,15 +49,16 @@ const Tasks = sequelize.define('tasks', {
 );
 
 Tasks.beforeCreate(async (task) => {
-    if (!task.cardNo) {
-        const lastTask = await Tasks.findOne({ 
-            order: [['createdAt', 'DESC']]
-        });
-        const lastNumber = lastTask 
-            ? parseInt(lastTask.card_no.split('-')[1]) || 0 
-            : 0;
-        task.cardNo = `BT-${lastNumber + 1}`;
-    }
+    // if (task.card_no) {
+    const lastTask = await Tasks.findOne({ 
+        order: [['createdAt', 'DESC']]
+    });
+    const lastNumber = lastTask 
+        ? parseInt(lastTask.card_no.split('-')[1]) || 0 
+        : 0;
+    
+    task.card_no = `BT-${lastNumber + 1}`;
+    // }
 });
 
 module.exports = {
