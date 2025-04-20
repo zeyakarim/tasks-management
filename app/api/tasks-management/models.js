@@ -19,7 +19,7 @@ const Tasks = sequelize.define('tasks', {
     status: {
         type: DataTypes.ENUM,
         allowNull: false,
-        values: ['to-do','in-progress','completed'],
+        values: ['to-do','in-progress', 'qa', 'completed'],
         defaultValue: 'to-do',
     },
     git_branch_name: {

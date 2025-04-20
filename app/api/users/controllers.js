@@ -19,7 +19,6 @@ exports.login = catchAsync(async (req, res, next) => {
     try {
         const { data } = req.body;
         const { user, token } = await loginService(data, res);
-        console.log(user,'user',token,'token')
 
         sendAuthCookie(token, res);
 
