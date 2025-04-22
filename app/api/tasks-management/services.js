@@ -1,6 +1,7 @@
+const { Op } = require("sequelize");
 const sequelize = require("../../../config/database");
 const AppError = require("../../utilities/appError");
-const { Tasks } = require("./models")
+const { Tasks } = require("./models");
 
 const createTaskService = async (data) => {
     const transaction = await sequelize.transaction();
@@ -18,9 +19,23 @@ const createTaskService = async (data) => {
     }
 }
 
-const fetchTasksService = async () => {
+const fetchTasksService = async (searchFor, filter) => {
     try {
+
+        const whereClause = {
+            [Op.or]: [
+                { title: { [Op.like]: `%${searchFor}%` } },
+                { git_branch_name: { [Op.like]: `%${searchFor}%` } },
+                { card_no: { [Op.like]: `%${searchFor}%` } },
+                { card_type: { [Op.like]: `%${searchFor}%` } }
+            ]
+        };
+
+        if (filter) {
+            whereClause[Op.and] = { status: filter }
+        }
         const fetchedTasks = await Tasks.findAll({
+            where: whereClause,
             order : [['createdAt','ASC']],
             raw : true
         });

@@ -14,7 +14,8 @@ exports.createTask = catchAsync(async (req, res, next) => {
 
 exports.fetchTasks = catchAsync(async (req, res, next) => {
     try {
-        const fetchedTasks = await fetchTasksService();
+        const { searchFor, filter } = req?.query;
+        const fetchedTasks = await fetchTasksService(searchFor, filter);
         res.json(success(fetchedTasks, "Tasks Fetched Successfully!"))
     } catch (error) {
         res.json(failure(error, error?.message))
