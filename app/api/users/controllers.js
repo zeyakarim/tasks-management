@@ -1,4 +1,3 @@
-require('dotenv').config(); // this is important!
 const AppError = require("../../utilities/appError");
 const catchAsync = require("../../utilities/catchAsync");
 const { success, failure } = require("../../utilities/responseHandler");
