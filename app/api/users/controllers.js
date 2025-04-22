@@ -70,3 +70,16 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
   
     next();
 });
+
+exports.getMe = catchAsync(async (req, res, next) => {  
+    let cookie = req.cookies['jwt'];
+    let decoded = jwt.verify(cookie, process.env.JWT_SECRET, {
+        complete: true,
+    });
+
+    const user = await Users.findOne({
+        where: { id : decoded?.payload?.id }
+    });
+
+    res.json(success(user, "User Logged-in Successfully!"));
+});

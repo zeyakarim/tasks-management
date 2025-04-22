@@ -6,4 +6,6 @@ router.post('/signup', controllers.signup);
 
 router.post('/login', controllers.login);
 
+router.get('/getMe', controllers.getMe);
+
 module.exports = router;
