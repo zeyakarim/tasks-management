@@ -32,6 +32,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
 exports.isLoggedIn = catchAsync(async (req, res, next) => {
     const cookie = req.cookies['jwt'];
+    console.log(cookie,'cookie')
   
     if (!cookie) {
         return next(
@@ -46,6 +47,8 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
     const decoded = jwt.verify(cookie, process.env.JWT_SECRET, {
       complete: true,
     });
+
+    console.log(decoded,'decoded')
   
     if (!decoded) {
         return next(
@@ -65,6 +68,8 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
             id: decoded.payload.id
         }
     });
+
+    console.log(user,'user')
   
     req.user = user.toJSON();
   
