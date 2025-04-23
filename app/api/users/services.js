@@ -71,9 +71,9 @@ const signToken = (userId) => {
 const sendAuthCookie = (token, res, exp) => {
     const cookieOptions = {
         expires: new Date(Date.now() + ms(exp || process.env.JWT_COOKIE_EXPIRES_IN)),
-        // httpOnly: true,
+        httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // HTTPS-only in production
-        sameSite: 'strict', // Prevent CSRF
+        sameSite: 'none', // Prevent CSRF
     };
     res.cookie('jwt', token, cookieOptions);
 };
