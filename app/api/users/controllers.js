@@ -31,6 +31,7 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.isLoggedIn = catchAsync(async (req, res, next) => {
+    console.log(req?.cookies,'cookies')
     const cookie = req.cookies['jwt'];
     console.log(cookie,'cookie')
   
