@@ -75,7 +75,6 @@ const sendAuthCookie = (token, res, exp) => {
         secure: process.env.NODE_ENV === 'production', // HTTPS-only in production
         sameSite: 'strict', // Prevent CSRF
     };
-    console.log(cookieOptions,'cookieOptions')
     res.cookie('jwt', token, cookieOptions);
 };
 
